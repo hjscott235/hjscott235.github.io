@@ -35,20 +35,20 @@ body { margin: 0; padding: 0; }
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css" type="text/css">
 <div id="comparison-container">
-    <div id="option1" class="map"></div>
-    <div id="option2" class="map"></div>
+    <div id="before" class="map"></div>
+    <div id="after" class="map"></div>
 </div>
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJjaXhxNGkxdXEwNzcyMzJtc2hzandhODYzIn0.GRSUviL269GL1QKW3aOKIA';
     var beforeMap = new mapboxgl.Map({
-        container: 'option1',
+        container: 'before',
         style: 'mapbox://styles/hjscott235/ckm3rhn2a11zb17nrx6kd1tnq',
         center: [0, 0],
         zoom: 0
     });
 ​
     var afterMap = new mapboxgl.Map({
-        container: 'option2',
+        container: 'after',
         style: 'mapbox://styles/hjscott235/ckju9hpbb13nz19mvdymehfcw',
         center: [0, 0],
         zoom: 0
