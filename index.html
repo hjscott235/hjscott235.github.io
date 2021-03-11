@@ -13,55 +13,55 @@ body { margin: 0; padding: 0; }
 </head>
 <body>
 <style>
-    body {
-        overflow: hidden;
-    }
-​
-    body * {
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-​
-    .map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-    }
+body {
+overflow: hidden;
+}
+ 
+body * {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+ 
+.map {
+position: absolute;
+top: 0;
+bottom: 0;
+width: 100%;
+}
 </style>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css" type="text/css">
 <div id="comparison-container">
-    <div id="before" class="map"></div>
-    <div id="after" class="map"></div>
+<div id="before" class="map"></div>
+<div id="after" class="map"></div>
 </div>
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJjaXhxNGkxdXEwNzcyMzJtc2hzandhODYzIn0.GRSUviL269GL1QKW3aOKIA';
-    var beforeMap = new mapboxgl.Map({
-        container: 'before',
-        style: 'mapbox://styles/hjscott235/ckju9hpbb13nz19mvdymehfcw',
-        center: [0, 0],
-        zoom: 0
-    });
-
-    var afterMap = new mapboxgl.Map({
-        container: 'after',
-        style: 'mapbox://styles/hjscott235/ckm3rhn2a11zb17nrx6kd1tnq',
-        center: [0, 0],
-        zoom: 0
-    });
-
-    // A selector or reference to HTML element
-    var container = '#comparison-container';
-
-    var map = new mapboxgl.Compare(beforeMap, afterMap, container, {
-        // Set this to enable comparing two maps by mouse movement:
-        // mousemove: true
-    });
+var beforeMap = new mapboxgl.Map({
+container: 'before',
+style: 'mapbox://styles/mapbox/light-v10',
+center: [0, 0],
+zoom: 0
+});
+ 
+var afterMap = new mapboxgl.Map({
+container: 'after',
+style: 'mapbox://styles/mapbox/dark-v10',
+center: [0, 0],
+zoom: 0
+});
+ 
+// A selector or reference to HTML element
+var container = '#comparison-container';
+ 
+var map = new mapboxgl.Compare(beforeMap, afterMap, container, {
+// Set this to enable comparing two maps by mouse movement:
+// mousemove: true
+});
 </script>
-
+ 
 </body>
 </html>
