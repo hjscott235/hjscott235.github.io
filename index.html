@@ -50,6 +50,15 @@
     // Add the geocoder to the map
     map.addControl(geocoder, 'top-left'); // Add the search box to the top left
     });  
+    map.on('style.load', function() {
+    map.on('click', function(e) {
+      var coordinates = e.lngLat;
+      new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML('I call this area: ')
+        .addTo(map);
+  });
+});
   </script>
 
 </body>
