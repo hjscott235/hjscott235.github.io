@@ -24,6 +24,20 @@
       bottom: 0;
       width: 100%;
     }
+
+    .eleInfo {
+      position: absolute;
+      font-family: sans-serif;
+      margin-top: 5px;
+      margin-left: 5px;
+      padding: 5px;
+      width: 200px;
+      border: 2px solid black;
+      font-size: 20px;
+      color: #222;
+      background-color: #fff;
+    }
+
   </style>
 </head>
 
@@ -59,6 +73,10 @@
     var lng;
     var lat;
 
+    var lngDisplay = document.getElementById('lng');
+    var latDisplay = document.getElementById('lat');
+    var eleDisplay = document.getElementById('ele');
+
     map.on('click', function(e) {
       // When the map is clicked, set the lng and lat variables equal to the lng and lat properties in the returned lngLat object
       lng = e.lngLat.lng;
@@ -74,6 +92,12 @@
 
     var query = 'https://api.mapbox.com/v4/' + tileset + '/tilequery/' + coordinates[0] + ',' + coordinates[1] + '.json?radius=' + radius + '&limit= ' + limit + ' &access_token=' + mapboxgl.accessToken;
   </script>
+
+  <div class="eleInfo">
+    <div>Longitude: <span id='lng'></span></div>
+    <div>Latitude: <span id='lat'></span></div>
+    <div>Elevation: <span id='ele'></span></div>
+  </div>
 
 </body>
 
