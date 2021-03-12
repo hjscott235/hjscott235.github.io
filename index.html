@@ -59,6 +59,11 @@
         .addTo(map);
   });
 });
+    var tileset = 'hjscott235.5m5b0brc'; // replace this with the ID of the tileset you created
+    var radius = 600; // 1609 meters is roughly equal to one mile
+    var limit = 1; // The maximum amount of results to return
+
+    var query = 'https://api.mapbox.com/v4/' + tileset + '/tilequery/' + coordinates[0] + ',' + coordinates[1] + '.json?radius=' + radius + '&limit= ' + limit + ' &access_token=' + mapboxgl.accessToken;
   </script>
 
 </body>
