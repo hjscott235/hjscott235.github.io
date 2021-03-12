@@ -1,67 +1,44 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>Swipe between maps</title>
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
-<style>
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-</style>
+  <meta charset='utf-8' />
+  <title>Healthy food finder</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <!-- Import Mapbox GL JS -->
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+  <!-- Import jQuery -->
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
 </head>
+
 <body>
-<style>
-body {
-overflow: hidden;
-}
- 
-body * {
--webkit-touch-callout: none;
--webkit-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;
-}
- 
-.map {
-position: absolute;
-top: 0;
-bottom: 0;
-width: 100%;
-}
-</style>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css" type="text/css">
-<div id="comparison-container">
-<div id="before" class="map"></div>
-<div id="after" class="map"></div>
-</div>
-<script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJja20zdjVtejkwajR6MnZvMjV1aG03dW14In0.wxYmD-iFBTyoJjDBYZq8Rw';
-var beforeMap = new mapboxgl.Map({
-container: 'before',
-style: 'mapbox://styles/hjscott235/ckm3rhn2a11zb17nrx6kd1tnq',
-center: [0, 0],
-zoom: 0
-});
- 
-var afterMap = new mapboxgl.Map({
-container: 'after',
-style: 'mapbox://styles/hjscott235/ckju9hpbb13nz19mvdymehfcw',
-center: [0, 0],
-zoom: 0
-});
- 
-// A selector or reference to HTML element
-var container = '#comparison-container';
- 
-var map = new mapboxgl.Compare(beforeMap, afterMap, container, {
-// Set this to enable comparing two maps by mouse movement:
-// mousemove: true
-});
-</script>
- 
+
+  <div id='map'></div>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJja20zdjVtejkwajR6MnZvMjV1aG03dW14In0.wxYmD-iFBTyoJjDBYZq8Rw'; // set the access token
+
+    var map = new mapboxgl.Map({
+      container: 'map', // The container ID
+      style: 'mapbox://styles/hjscott235/ckm5o9u570j3617m8xcjqq4q0', // The map style to use
+      center: [54.57, -2.85], // Starting position [lng, lat]
+      zoom: 4 // Starting zoom level
+    });
+  </script>
+
 </body>
+
 </html>
