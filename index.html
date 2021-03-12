@@ -81,7 +81,7 @@
       // When the map is clicked, set the lng and lat variables equal to the lng and lat properties in the returned lngLat object
       lng = e.lngLat.lng;
       lat = e.lngLat.lat;
-      
+
       getElevation();
     });
 
@@ -94,6 +94,8 @@
     method: 'GET',
     url: query,
   }).done(function(data) {
+    lngDisplay.textContent = lng.toFixed(2);
+    latDisplay.textContent = lat.toFixed(2);    
     // Get all the returned features
     var allFeatures = data.features;
     console.log(allFeatures);
