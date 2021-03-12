@@ -42,7 +42,13 @@
 </head>
 
 <body>
-
+  
+  <div class="eleInfo">
+    <div>Longitude: <span id='lng'></span></div>
+    <div>Latitude: <span id='lat'></span></div>
+    <div>Elevation: <span id='ele'></span></div>
+  </div>
+  
   <div id='map'></div>
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJja20zdjVtejkwajR6MnZvMjV1aG03dW14In0.wxYmD-iFBTyoJjDBYZq8Rw'; // set the access token
@@ -98,28 +104,19 @@
     latDisplay.textContent = lat.toFixed(2);    
     // Get all the returned features
     var allFeatures = data.features;
-    console.log(allFeatures);
     // Create an empty array to add elevation data to
     var elevations = [];
     // For each returned feature, add elevation data to the elevations array
     for (i = 0; i < allFeatures.length; i++) {
       elevations.push(allFeatures[i].properties.ele);
     }
-    console.log(elevations);
     // In the elevations array, find the largest value
     var highestElevation = Math.max(...elevations);
-    console.log(highestElevation);
   });
   }
 
 
   </script>
-
-  <div class="eleInfo">
-    <div>Longitude: <span id='lng'></span></div>
-    <div>Latitude: <span id='lat'></span></div>
-    <div>Elevation: <span id='ele'></span></div>
-  </div>
 
 </body>
 
