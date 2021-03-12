@@ -33,12 +33,15 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJja20zdjVtejkwajR6MnZvMjV1aG03dW14In0.wxYmD-iFBTyoJjDBYZq8Rw'; // set the access token
 
+// Style
     var map = new mapboxgl.Map({
       container: 'map', // The container ID
       style: 'mapbox://styles/hjscott235/ckm5o9u570j3617m8xcjqq4q0', // The map style to use
       center: [-2.85,54.57], // Starting position [lng, lat]
       zoom: 5 // Starting zoom level
     });
+
+// Search bar :) 
     map.on('load', function() {
     var geocoder = new MapboxGeocoder({ // Initialize the geocoder
       accessToken: mapboxgl.accessToken, // Set the access token
@@ -49,22 +52,22 @@
     });
     // Add the geocoder to the map
     map.addControl(geocoder, 'top-left'); // Add the search box to the top left
-    });  
-    map.addLayer({
-      id: 'measure-points',
-      type: 'circle',
-      source: 'geojson',
-      paint: {
-        'circle-radius': 5,
-        'circle-color': '#000'
-      },
-      filter: ['in', '$type', 'Point']
+    }); 
+
+//Add lat/lon on click
+    // Create variables for the latitude and longitude
+    var lng;
+    var lat;
+
+    map.on('click', function(e) {
+      // When the map is clicked, set the lng and lat variables equal to the lng and lat properties in the returned lngLat object
+      lng = e.lngLat.lng;
+      lat = e.lngLat.lat;
+      console.log(lng + ', ' + lat);
     });
-    map.on('click', function (e) {
-      var features = map.queryRenderedFeatures(e.point, {
-      layers: ['measure-points']
-    });
-  });
+
+
+// Tilequery stuffs
     var tileset = 'hjscott235.5m5b0brc'; // replace this with the ID of the tileset you created
     var radius = 600; // 1609 meters is roughly equal to one mile
     var limit = 1; // The maximum amount of results to return
