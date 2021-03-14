@@ -3,15 +3,16 @@
 
 <head>
   <meta charset='utf-8' />
-  <title>UK placenames</title>
+  <title>Healthy food finder</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <!-- Import Mapbox GL JS -->
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
   <!-- Import jQuery -->
   <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
-  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
+  // call geocoder
+ <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
   <style>
     body {
       margin: 0;
@@ -24,103 +25,99 @@
       bottom: 0;
       width: 100%;
     }
-
-    .eleInfo {
-      position: absolute;
-      font-family: sans-serif;
-      margin-top: 5px;
-      margin-left: 80%;
-      padding: 5px;
-      width: 15%;
-      border: 2px solid black;
-      font-size: 20px;
-      color: #222;
-      background-color: #fff;
-    }
-
   </style>
 </head>
 
 <body>
 
   <div id='map'></div>
-  <div class="eleInfo">
-    <div>Longitude: <span id='lng'></span></div>
-    <div>Latitude: <span id='lat'></span></div>
-    <div>Elevation: <span id='ele'></span></div>
-  </div>
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJja20zdjVtejkwajR6MnZvMjV1aG03dW14In0.wxYmD-iFBTyoJjDBYZq8Rw'; // set the access token
 
-// Style
     var map = new mapboxgl.Map({
       container: 'map', // The container ID
       style: 'mapbox://styles/hjscott235/ckkcpcpgh2h0l17pdfeoguh8c', // The map style to use
-      center: [-2.85,54.57], // Starting position [lng, lat]
+      center: [-2.3116,54.3852], // Starting position [lng, lat]
       zoom: 5 // Starting zoom level
     });
+ 
 
-// Search bar :) 
-    map.on('load', function() {
-    var geocoder = new MapboxGeocoder({ // Initialize the geocoder
-      accessToken: mapboxgl.accessToken, // Set the access token
-      mapboxgl: mapboxgl, // Set the mapbox-gl instance
-      zoom: 13, // Set the zoom level for geocoding results
-      placeholder: "Enter a city or district name", // This placeholder text will display in the search bar
-      bbox: [-16.71666175,50.00139246,9.18802935,58.62547145] // Set a bounding box
-    });
-    // Add the geocoder to the map
-    map.addControl(geocoder, 'top-left'); // Add the search box to the top left
-    }); 
-
-//Add lat/lon on click
-    // Create variables for the latitude and longitude
-    var lng;
-    var lat;
-
-    var lngDisplay = document.getElementById('lng');
-    var latDisplay = document.getElementById('lat');
-    var eleDisplay = document.getElementById('ele');
-
-    var marker = new mapboxgl.Marker({
-      'color': '#314ccd'
-    });
-
-    map.on('click', function(e) {
-      marker.setLngLat(e.lngLat).addTo(map);
-      // When the map is clicked, set the lng and lat variables equal to the lng and lat properties in the returned lngLat object
-      lng = e.lngLat.lng;
-      lat = e.lngLat.lat;
-
-      getElevation();
-    });
-
-
-// Tilequery stuffs
-    function getElevation() {
-  // Construct the API request
-  var query = 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/tilequery/' + lng + ',' + lat + '.json?layers=contour&limit=50&access_token=' + mapboxgl.accessToken;
-  $.ajax({
-    method: 'GET',
-    url: query,
-  }).done(function(data) {
-    lngDisplay.textContent = lng.toFixed(2);
-    latDisplay.textContent = lat.toFixed(2);    
-    // Get all the returned features
-    var allFeatures = data.features;
-    // Create an empty array to add elevation data to
-    var elevations = [];
-    // For each returned feature, add elevation data to the elevations array
-    for (i = 0; i < allFeatures.length; i++) {
-      elevations.push(allFeatures[i].properties.ele);
-    }
-    // In the elevations array, find the largest value
-    var highestElevation = Math.max(...elevations);
+// Add geocoder
+map.on('load', function() {
+  var geocoder = new MapboxGeocoder({ // Initialize the geocoder
+    accessToken: mapboxgl.accessToken, // Set the access token
+    mapboxgl: mapboxgl, // Set the mapbox-gl instance
+    zoom: 13, // Set the zoom level for geocoding results
+    placeholder: "Search by City or District", // This placeholder text will display in the search bar
+    countries: 'gb',
+    marker: false
   });
-  }
+  
+  // Add the geocoder to the map
+  map.addControl(geocoder, 'top-left');
+  // Add search box top left
+  
+  map.addSource('tilequery', { // Add a new source to the map style: https://docs.mapbox.com/mapbox-gl-js/api/#map#addsource
+    type: "geojson",
+    data: {
+      "type": "FeatureCollection",
+      "features": []
+      }
+  });
+});
+    
+// Create variables for the latitude and longitude
+var lng;
+var lat;
+// create marker variable
+var marker = new mapboxgl.Marker({
+      'color': '#D12A07'
+    });
 
+map.on('click', function(e) {
+  // When the map is clicked, set the lng and lat variables equal to the lng and lat properties in the returned lngLat object
+  marker.setLngLat(e.lngLat).addTo(map);
+  lng = e.lngLat.lng;
+  lat = e.lngLat.lat;
+  
+// specify how to query tile
+  var tileset = 'hjscott235.4i61a0ap'; // replace this with the ID of the tileset you created
+  var radius = 1000; // 1km
+  var limit = 5; // The maximum amount of results to return
+  //call tileset api
+  
+var query = 'https://api.mapbox.com/v4/' + tileset + '/tilequery/' + lng + ',' + lat + '.json?radius=' + radius + '&limit= ' + limit + ' &access_token=' + mapboxgl.accessToken;
+  
+  $.ajax({
+  method: 'GET',
+  url: query,
+}).done(function(data) {
+  map.getSource('tilequery').setData(data);
+  // Code from the next step will go here
+})
+  
+    map.addLayer({ // Add a new layer to the map style: https://docs.mapbox.com/mapbox-gl-js/api/#map#addlayer
+  id: "tilequery-polygon",
+  type: "fill",
+  source: "tilequery", // Set the layer source
+  paint: {
+    "fill-opacity": 0.4
+  },
+    "fill-color": [ // Specify the color each circle should be
+      'match', // Use the 'match' expression: https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
+      ['get', '_type'], // Use the result 'STORE_TYPE' property
+      'parish', '#FF8C00',
+      'named-places', '#FF8C00',
+      'place', '#FF8C00',
+      'district', '#9ACD32',
+      '#FF0000' // any other store type
+    ]
+  });
+  
+});
 
   </script>
+
 </body>
 
 </html>
