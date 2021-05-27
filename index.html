@@ -1,123 +1,67 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset='utf-8' />
-  <title>Healthy food finder</title>
-  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-  <!-- Import Mapbox GL JS -->
-  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
-  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
-  <!-- Import jQuery -->
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-  // call geocoder
- <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
-<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-
-    #map {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 100%;
-    }
-  </style>
+<meta charset="utf-8">
+<title>Swipe between maps</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
 </head>
-
 <body>
+<style>
+    body {
+        overflow: hidden;
+    }
 
-  <div id='map'></div>
-  <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJja20zdjVtejkwajR6MnZvMjV1aG03dW14In0.wxYmD-iFBTyoJjDBYZq8Rw'; // set the access token
+    body * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
 
-    var map = new mapboxgl.Map({
-      container: 'map', // The container ID
-      style: 'mapbox://styles/hjscott235/ckkcpcpgh2h0l17pdfeoguh8c', // The map style to use
-      center: [-2.3116,54.3852], // Starting position [lng, lat]
-      zoom: 5 // Starting zoom level
-    });
- 
-
-// Add geocoder
-map.on('load', function() {
-  var geocoder = new MapboxGeocoder({ // Initialize the geocoder
-    accessToken: mapboxgl.accessToken, // Set the access token
-    mapboxgl: mapboxgl, // Set the mapbox-gl instance
-    zoom: 13, // Set the zoom level for geocoding results
-    placeholder: "Search by City or District", // This placeholder text will display in the search bar
-    countries: 'gb',
-    marker: false
-  });
-  
-  // Add the geocoder to the map
-  map.addControl(geocoder, 'top-left');
-  // Add search box top left
-  
-  map.addSource('tilequery', { // Add a new source to the map style: https://docs.mapbox.com/mapbox-gl-js/api/#map#addsource
-    type: "geojson",
-    data: {
-      "type": "FeatureCollection",
-      "features": []
-      }
-  });
-});
-    
-// Create variables for the latitude and longitude
-var lng;
-var lat;
-// create marker variable
-var marker = new mapboxgl.Marker({
-      'color': '#D12A07'
+    .map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css" type="text/css">
+<div id="comparison-container">
+    <div id="before" class="map"></div>
+    <div id="after" class="map"></div>
+</div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJja20zdjVtejkwajR6MnZvMjV1aG03dW14In0.wxYmD-iFBTyoJjDBYZq8Rw';
+    var beforeMap = new mapboxgl.Map({
+        container: 'before',
+        style: 'https://api.mapbox.com/styles/v1/hjscott235/ckp6zj7x23l3418qbp9aoiueo.html?fresh=true&title=view&access_token=pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJja20zdjVtejkwajR6MnZvMjV1aG03dW14In0.wxYmD-iFBTyoJjDBYZq8Rw',
+        center: [0, 0],
+        zoom: 0
     });
 
-map.on('click', function(e) {
-  // When the map is clicked, set the lng and lat variables equal to the lng and lat properties in the returned lngLat object
-  marker.setLngLat(e.lngLat).addTo(map);
-  lng = e.lngLat.lng;
-  lat = e.lngLat.lat;
-  
-// specify how to query tile
-  var tileset = 'hjscott235.4i61a0ap'; // replace this with the ID of the tileset you created
-  var radius = 1000; // 1km
-  var limit = 5; // The maximum amount of results to return
-  //call tileset api
-  
-var query = 'https://api.mapbox.com/v4/' + tileset + '/tilequery/' + lng + ',' + lat + '.json?radius=' + radius + '&limit= ' + limit + ' &access_token=' + mapboxgl.accessToken;
-  
-  $.ajax({
-  method: 'GET',
-  url: query,
-}).done(function(data) {
-  map.getSource('tilequery').setData(data);
-  // Code from the next step will go here
-})
-  
-    map.addLayer({ // Add a new layer to the map style: https://docs.mapbox.com/mapbox-gl-js/api/#map#addlayer
-  id: "tilequery-polygon",
-  type: "fill",
-  source: "tilequery", // Set the layer source
-  paint: {
-    "fill-opacity": 0.4
-  },
-    "fill-color": [ // Specify the color each circle should be
-      'match', // Use the 'match' expression: https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
-      ['get', '_type'], // Use the result 'STORE_TYPE' property
-      'parish', '#FF8C00',
-      'named-places', '#FF8C00',
-      'place', '#FF8C00',
-      'district', '#9ACD32',
-      '#FF0000' // any other store type
-    ]
-  });
-  
-});
+    var afterMap = new mapboxgl.Map({
+        container: 'after',
+        style: 'https://api.mapbox.com/styles/v1/hjscott235/ckp6zxvmt1eco17t9i6g44gbg.html?fresh=true&title=view&access_token=pk.eyJ1IjoiaGpzY290dDIzNSIsImEiOiJja20zdjVtejkwajR6MnZvMjV1aG03dW14In0.wxYmD-iFBTyoJjDBYZq8Rw',
+        center: [0, 0],
+        zoom: 0
+    });
 
-  </script>
+    // A selector or reference to HTML element
+    var container = '#comparison-container';
+
+    var map = new mapboxgl.Compare(beforeMap, afterMap, container, {
+        // Set this to enable comparing two maps by mouse movement:
+        // mousemove: true
+    });
+</script>
 
 </body>
-
 </html>
