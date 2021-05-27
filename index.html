@@ -58,10 +58,13 @@ body { margin: 0; padding: 0; }
 
     // A selector or reference to HTML element
     var container = '#comparison-container';
-
+    
+    // LOAD URL PARAMS //
+    var urlParams = new URLSearchParams(window.location.search);
     var map = new mapboxgl.Compare(beforeMap, afterMap, container, {
         // Set this to enable comparing two maps by mouse movement:
         // mousemove: true
+        hash: true 
     });
 </script>
 
